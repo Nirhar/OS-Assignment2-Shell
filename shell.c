@@ -30,9 +30,10 @@ int main(){
     while(1){
         showPrompt();
         char* cmd=getCmd(); 
-        storeHistory(cmd);
+        
         char** args=parseCmd(cmd);
-        execCmd(args);
+        int x=execCmd(args);
+        if(x!=2)storeHistory(cmd);
     }
     
 
@@ -68,7 +69,7 @@ char** parseCmd(char* cmd){
     while(ptr<len){
         char* word=(char*)malloc(MAX_NO_OF_ARGUMENTS*sizeof(char));
         while(cmd[ptr]!=' ' && ptr<len)word[wptr++]=cmd[ptr++];
-        word[ptr]='\0';
+        word[wptr]='\0';
         args[c++]=word;
         wptr=0;
         ptr++;
@@ -76,7 +77,7 @@ char** parseCmd(char* cmd){
     return args;
 }
 int execCmd(char** args){
-    if(!strcmp(args[0],"cd")){                                                    //if cd is entered
+    if(!strcmp(args[0],"cd")){                                                    //if cd is entered                                           
         if(chdir(args[1]))printf("cd error: Directory not found\n");
     }else if(!strcmp(args[0],"history")){                                         //if history is entered
         printHistory();
@@ -96,6 +97,30 @@ int execCmd(char** args){
         
     }else if(!strcmp(args[0],"job")){                                             //if job is entered
 
+    }else if(args[0][0]=='!'){
+        struct _hist_entry** list=history_list();
+        if(args[0][1]!='-'){
+            char c=args[0][1]-'0'-1;
+            if(c>9 || c<0){printf("'!' error: Invalid Number given"); return 1;}
+            char* cmd=list[c]->line;
+            char** args=parseCmd(cmd);
+            int t=execCmd(args);
+            storeHistory(cmd);
+            return 2;
+        }else if(args[0][1]=='-'){
+            HISTORY_STATE* state=history_get_history_state(); 
+            int l=state->length;
+            char c=args[0][2]-'0'-1;
+            if(c>9 || c<0){printf("'!' error: Invalid Number given"); return 1;}
+            char* cmd=list[l-c-1]->line;
+            char** args=parseCmd(cmd);
+            int t=execCmd(args);
+            storeHistory(cmd);
+            return 2;
+        }else{
+            printf("'!' error: Invalid Number given");
+            return 1;
+        }
     }else{
         runOtherCmd(args);
     }
@@ -103,7 +128,7 @@ int execCmd(char** args){
 }
 
 int runOtherCmd(char** args){
-    
+
 }
 /*
 Things to experiment:
