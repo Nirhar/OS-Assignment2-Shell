@@ -162,7 +162,7 @@ int execCmd(char** args, int nargs){
         int t=execCmd(args,nargs);
         storeHistory(cmd);
         return 2;
-    }else{
+    }else{									   //if another cmd is entered
         runOtherCmd(args,nargs);
     }
    

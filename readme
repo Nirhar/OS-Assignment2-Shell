@@ -32,4 +32,4 @@ Note: This does not occurr all the time, but only some times.
 but run after one execution. For example: After killing all bg processes, if I want to exit, the first time I enter exit, 
 nothing happens, but the second time it works.
 
- 
+
