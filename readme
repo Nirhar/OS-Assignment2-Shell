@@ -1,0 +1,35 @@
+All implementations mentioned in the experiment sheet have been implemented.
+Explanation of the folder structure:
+
+Run: "gcc -o shell shell.c -lreadline" to compile
+Run "./shell" to run the shell
+
+fileIO: A program that takes input using scanf and prints the input taken using printf. Its sourcecode is fileIO.c
+
+loop: A blocking program that only loops. Its sourcecode is loop.c
+
+Inputdata: A possible file to provide inputs to FileIO
+opdata: A file where output from fileIO is stored
+
+Inputdata and opdata were used to check input output file redirection.
+
+
+
+
+But the following bugs exist:
+
+1. If I try to use command from history that executes a program with input-output file redirection, 
+the input output file redirection does not work. The program takes input and output from console only. 
+But the program works if the same statement is entered by hand. 
+
+2. The readline() function that takes input suffers from lag when background processes are running. It does not take 
+input properly and many times the keys that you press on the keyboard does not reflect in the console, immediately 
+but reflects after a few times after enter is pressed.
+
+Note: This does not occurr all the time, but only some times.
+
+3. After all executing background child process have been killed, some commands like exit and job do not run immediately, 
+but run after one execution. For example: After killing all bg processes, if I want to exit, the first time I enter exit, 
+nothing happens, but the second time it works.
+
+ 

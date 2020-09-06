@@ -58,6 +58,7 @@ int main(){
         int x=execCmd(args,nargs);
         if(x!=2)storeHistory(cmd);  //History commands should not be stored
         //freeMemory(cmd,args,nargs);
+        //fflush(stdin);
     }
     
 
@@ -69,6 +70,10 @@ void showPrompt(){
 }
 char* getCmd(){
     char* x=readline(""); //Allocated with Malloc, so no need to take care of size or \0
+    /*scanf("%[^\n]", x);
+    int len=strlen(x);
+    printf("len: %d\n",len);
+    x=(char*)realloc(x,sizeof(char)*(len-1));*/
     return x;
 }
 void storeHistory(char* cmd){
@@ -152,6 +157,7 @@ int execCmd(char** args, int nargs){
             return 1;
         }
         int l;
+        printf("Executing: %s\n",cmd);
         char** args=parseCmd(cmd,&l);
         int t=execCmd(args,nargs);
         storeHistory(cmd);
@@ -168,7 +174,7 @@ void updateBgProcessList(){
             int status;
             int t=waitpid(bglist[i]->pid, &status,WNOHANG);
             if(t==-1){
-                printf("Error occured in updatin background process list");
+                printf("Error occured in updating background process list");
             }else if(t){
                 removeBgProcess(bglist[i]->pid);
             }
